@@ -1,11 +1,13 @@
 import React from "react";
 import prisma, { PrismaTypes } from "#lib/prisma";
-import TaskCard from "./TaskCard";
+import TaskCard from "../projects/[slug]/TaskCard";
 import { Button } from "#components/ui/button";
 import Link from "next/link";
+import { DataTable } from "#components/DataTable";
+import { columns } from "./columns";
 
 async function Tasks(): Promise<JSX.Element> {
-    const tasks = JSON.parse(JSON.stringify(await prisma.task.findMany()));
+    const { tasks }: PrismaTypes.Task[] = await fetch('/tasks', { method: 'GET'});
     return (
             <>
                 <div className="flex justify-between">
@@ -16,11 +18,12 @@ async function Tasks(): Promise<JSX.Element> {
                         </Link>
                     </Button>
                 </div>
-                <div className="xl:rt-r-display-flex">
-                    {tasks?.map((task) =>
-                        <TaskCard task={task} key={task.id}/>
-                    )}
-                </div>
+                <DataTable columns={columns} data={tasks} />
+                {/*<div className="xl:rt-r-display-flex">*/}
+                {/*    {tasks?.map((task) =>*/}
+                {/*        <TaskCard task={task} key={task.id}/>*/}
+                {/*    )}*/}
+                {/*</div>*/}
             </>
     )
 }

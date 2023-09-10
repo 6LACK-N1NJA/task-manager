@@ -19,6 +19,15 @@ model Task {
     creatorId String?
     project Project? @relation(fields: [projectId], references: id)
     projectId String?
+    status Status @default(INBOX)
+}
+
+enum Status {
+    INBOX
+    TODO
+    PROGRESS
+    REVIEW
+    DONE
 }
 
 model Project {
@@ -35,7 +44,7 @@ model User {
     firstName String
     lastName String
     email String @unique
-    projects Project[]
+    projects Project[]2
     tasks Task[]
     role Role @default(USER)
 }
